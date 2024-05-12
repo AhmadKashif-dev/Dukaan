@@ -22,7 +22,7 @@ import Message from "../components/Message";
 
 const CartScreen = () => {
   const { id } = useParams();
-  const history = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const qty = Number(location.search ? location.search.split("=")[1] : 1);
 
@@ -30,8 +30,6 @@ const CartScreen = () => {
 
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
-
-  console.log(cartItems);
 
   useEffect(() => {
     if (id) {
@@ -44,7 +42,7 @@ const CartScreen = () => {
   };
 
   const checkOutHandler = () => {
-    history("/login?redirect=shipping");
+    navigate("/login?redirect=/shipping");
   };
   return (
     <Row>

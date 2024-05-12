@@ -26,7 +26,7 @@ const orderSchema = mongoose.Schema({
             ref: "Product"
         },
     }],
-    shippindAdress: {
+    shippingAddress: {
         address: {
             type: String,
             required: true
