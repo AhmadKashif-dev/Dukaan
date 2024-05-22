@@ -7,6 +7,7 @@ import Loader from '../components/Loader'
 import { getUserDetails, updateUserProfile } from '../actions/userActions'
 import { USER_UPDATE_PROFILE_RESET } from '../constants/userConstants'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { listMyOrders } from '../actions/orderAction'
 
 const ProfileScreen = () => {
     const [name, setName] = useState('')
@@ -27,7 +28,8 @@ const ProfileScreen = () => {
     const userUpdateProfile = useSelector((state) => state.userUpdateProfile)
     const { success } = userUpdateProfile
 
-
+    const orderListMy = useSelector((state) => state.orderListMy)
+    const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
 
     useEffect(() => {
         if (!userInfo) {
@@ -35,6 +37,7 @@ const ProfileScreen = () => {
         } else {
             if (!user.name) {
                 dispatch(getUserDetails('profile'))
+                dispatch(listMyOrders())
             } else {
                 setName(user.name)
                 setEmail(user.email)
@@ -112,7 +115,7 @@ const ProfileScreen = () => {
             </Col>
             <Col md={9}>
                 <h2>My Orders</h2>
-                {/* {loadingOrders ? (
+                {loadingOrders ? (
                     <Loader />
                 ) : errorOrders ? (
                     <Message variant='danger'>{errorOrders}</Message>
@@ -159,7 +162,7 @@ const ProfileScreen = () => {
                             ))}
                         </tbody>
                     </Table>
-                )} */}
+                )}
             </Col>
         </Row>
     )
