@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
-import products from "../products";
 import { useDispatch, useSelector } from "react-redux";
 import { listProduct } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
+import { useParams } from "react-router-dom";
+import Paginate from "../components/Paginate";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
+  const { keyword } = useParams()
+  const { pageNumber } = useParams();
+  const pageN = pageNumber ? Number(pageNumber) : 1;
+
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, page, pages } = productList;
   useEffect(() => {
-    dispatch(listProduct());
-  }, [dispatch]);
+    dispatch(listProduct(keyword, pageN));
+  }, [dispatch, keyword, pageN]);
 
   return (
     <>
@@ -23,13 +28,20 @@ const HomeScreen = () => {
       ) : error ? (
         <Message variant={'danger'}>{error}</Message>
       ) : (
-        <Row>
-          {products.map((product) => (
-            <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-              <Product product={product} />
-            </Col>
-          ))}
-        </Row>
+        <>
+          <Row>
+            {products.map((product) => (
+              <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <Product product={product} />
+              </Col>
+            ))}
+          </Row>
+          <Paginate
+            pages={pages}
+            page={page}
+            keyword={keyword ? keyword : ''}
+          />
+        </>
       )}
     </>
   );

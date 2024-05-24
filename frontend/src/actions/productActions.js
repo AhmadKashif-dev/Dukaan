@@ -22,11 +22,11 @@ import {
   from "../constants/productConstants"
 import { logout } from "./userActions"
 
-export const listProduct = () => async (dispatch) => {
+export const listProduct = (keyword = '', pageNumber = "") => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST })
 
-    const { data } = await axios.get("/api/products")
+    const { data } = await axios.get(`/api/products?keyword=${keyword}&pageNumber=${pageNumber}`)
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
       payload: data

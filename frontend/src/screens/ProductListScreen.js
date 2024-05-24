@@ -7,14 +7,17 @@ import Loader from '../components/Loader'
 import { useNavigate, useParams } from 'react-router-dom'
 import { createProduct, deleteProduct, listProduct } from '../actions/productActions'
 import { PRODUCT_CREATE_RESET } from '../constants/productConstants'
+import Paginate from '../components/Paginate'
 
 const ProductListScreen = () => {
     const history = useNavigate()
     const { id } = useParams()
+    const { pageNumber } = useParams();
+    const pageN = pageNumber ? Number(pageNumber) : 1;
     const dispatch = useDispatch()
 
     const productList = useSelector(state => state.productList)
-    const { loading, error, products } = productList
+    const { loading, error, products, page, pages } = productList
 
     const productDelete = useSelector(state => state.productDelete)
     const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
@@ -40,7 +43,7 @@ const ProductListScreen = () => {
         if (successCreate) {
             history(`/admin/product/${createdProduct._id}/edit`)
         } else {
-            dispatch(listProduct())
+            dispatch(listProduct("",pageN))
         }
     }, [
         dispatch,
@@ -49,6 +52,7 @@ const ProductListScreen = () => {
         successDelete,
         successCreate,
         createdProduct,
+        pageN
     ])
 
     const deleteHandler = (id) => {
@@ -120,7 +124,7 @@ const ProductListScreen = () => {
                             ))}
                         </tbody>
                     </Table>
-                    {/* <Paginate pages={pages} page={page} isAdmin={true} /> */}
+                    <Paginate pages={pages} page={page} isAdmin={true} />
                 </>
             )}
         </>
