@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProduct } from "../actions/productActions";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
+import ProductCarousel from "../components/ProductCarousel";
+import Meta from "../components/Meta";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
@@ -21,7 +23,14 @@ const HomeScreen = () => {
   }, [dispatch, keyword, pageN]);
 
   return (
-    <>
+    <> <Meta />
+    {!keyword ? (
+      <ProductCarousel />
+    ) : (
+      <Link to='/' className='btn btn-light'>
+        Go Back
+      </Link>
+    )}
       <h1>Latest Products</h1>
       {loading ? (
         <Loader />
